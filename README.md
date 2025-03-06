@@ -1,45 +1,21 @@
 # microwebApp - API - Docker compose - Flask - Consul
 
-Repository where you will find a web application with its respective API, both with frontend and backend to then monitor them in Consul
+Repository where you will find a web application with its respective API, both with frontend and backend monitored using Consul. This project provides two different implementation approaches for Consul service discovery.
 
-# To Run application
+## Project Structure
 
-## Start and SSH into Vagrant VM
+This repository contains two main directories:
+
+1. **`/aplicacionConsul`**: Implementation using Consul on a separate VM (traditional approach)
+2. **`/dockerAPIREST_consulCompose`**: Implementation using Docker Compose with containerized Consul
+
+## Approach 1: Consul on a Separate VM
+
+### Into /aplicacionConsul Start and SSH into Vagrant VMs
 
 ```
 vagrant up
 vagrant ssh servidorWeb
-```
-
-## Run the webApp
-
-```
-cd /home/vagrant/frontend
-export FLASK_APP=run.py
-/usr/local/bin/flask run --host=0.0.0.0 --port 5001
-```
-## Run the Users Microservice
-
-```
-cd /home/vagrant/microUsers
-export FLASK_APP=run.py
-/usr/local/bin/flask run --host=0.0.0.0 --port 5002
-```
-
-## Run the Products Microservice
-
-```
-cd /home/vagrant/microProducts
-export FLASK_APP=run.py
-/usr/local/bin/flask run --host=0.0.0.0 --port 5003
-```
-
-## Run the Orders Microservice
-
-```
-cd /home/vagrant/microOrders
-export FLASK_APP=run.py
-/usr/local/bin/flask run --host=0.0.0.0 --port 5004
 ```
 
 ## Connect consul with microservices
@@ -58,16 +34,9 @@ Vagrant.configure("2") do |config|
                 servidor.vm.hostname = "servidor"
                 servidor.vm.boot_timeout = 1000
         end
-        config.vm.define :cliente do |cliente|
-                cliente.vm.box = "bento/ubuntu-20.04"
-                cliente.vm.network :private_network, ip: "192.168.50.2"
-                cliente.vm.hostname = "cliente"
-                cliente.vm.boot_timeout = 1000
-        end
 end
 
 ```
-There are 2 machines but in this case we'll use just the "servidor" machine
 
 Before power on the "servidor" machine with vagrant up, we must install and enable the consul service with:
 
@@ -163,5 +132,20 @@ locate the docker-compose.yml then
 sudo docker compose up -d --build
 sudo docker ps to see them running
 
+```
+
+## Approach 2: Containerized Consul
+
+### Into dockerAPIREST_consulCompose Start and SSH into Vagrant VMs
+
+```
+vagrant up
+vagrant ssh
+```
+
+Go into /home/vagrant/dockerAPIREST and execute docker_compose.yml whit
+
+```
+docker compose up --build
 ```
 
